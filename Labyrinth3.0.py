@@ -7,9 +7,6 @@ cote = 25  # coté d'une cellule
 # Créer les matrices
 case = [[0 for lig in range(maze_size)] for col in range(maze_size)]
 pixel = [[ 0  for lig in range(maze_size)] for col in range(maze_size)]
-# Calculer et dessiner le prochain tableau
-def tableau():
-    dessiner()
 
 # Données initiales
 def init():
@@ -21,6 +18,7 @@ def init():
     create_maze()
 
 def init_pixel(): #placer les pixels
+    global nb
     nb = 0 
     for i in range(maze_size):
         pixel[0][i] = -1
@@ -40,20 +38,20 @@ def init_pixel(): #placer les pixels
     #print(pixel)
 
 def create_maze(): #Kruskal's algorithm
-    while is_finished() != True:
+    while is_finished() == True:
         x = random.randint(1,maze_size-2)
         #print("X=",x)
         y = 0
-        if x % 2 == 0: 
-            y = random.randint(1,((maze_size-2)/2)*2)
+        if y % 2 == 0: 
+            y = random.randrange(1,(maze_size-2),2)
             #print("y-1=",y)
         else:
-            y = random.randint(2,((maze_size-2)/2)*2)
+            y = random.randrange(2,(maze_size-2),2)
             #print("y-2=",y)
 
         cell_1=0
         cell_2=0
-        if pixel[x-1][y]==-1:
+        if pixel[x-1][y] == -1:
             cell_1= pixel[x][y-1]
             #print("Cell1-1=",cell_1)
             cell_2= pixel[x][y+1]
@@ -66,12 +64,11 @@ def create_maze(): #Kruskal's algorithm
                         
         if cell_1 != cell_2:
             pixel[x][y] = 0
-        for i in range(1,maze_size-1,2):
-            for j in range(1,maze_size-1,2):
-                if pixel[i][j] == cell_2:
-                    pixel[i][j] = cell_1
-
-    pixel[0][1]  = 0 
+        for x in range(1,maze_size-1,2):
+            for y in range(1,maze_size-1,2):
+                if pixel[x][y] == cell_2:
+                    pixel[x][y] = cell_1
+    pixel[0][1] = 0 
     pixel[maze_size-1][maze_size-2] = 0
 
 
@@ -80,8 +77,8 @@ def is_finished():
         for colonne in ligne:
             #print("Colonne",colonne) 
             if colonne >= 1:
-                return False
-    return True
+                return True
+    return False
 
 # Dessiner tous les pixels
 def rgb(rgb):
@@ -104,7 +101,7 @@ fenetre.minsize(cote*maze_size,cote*maze_size)
 fenetre.maxsize(cote*maze_size,cote*maze_size)
 canvas.pack()
 init()
-tableau()
+dessiner()
 print(""" 
     ======================
         maze generator
