@@ -1,7 +1,7 @@
 from tkinter import *
 import random
 
-maze_size = 35  # taille du labyrinth
+maze_size = 34  # taille du labyrinth
 cote = 25  # coté d'une cellule
 
 # Créer les matrices
@@ -42,34 +42,34 @@ def create_maze(): #Kruskal's algorithm
         x = random.randint(1,maze_size-2)
         #print("X=",x)
         y = 0
-        if x % 2 == 0: 
-            y = (((random.randint(1,(maze_size-2),1))/2)*2)
+        if y % 2 == 0: 
+            y = random.randint(0,((maze_size-2)/2)) * 2 
             #print("y-1=",y)
         else:
-            y = (((random.randrange(2,(maze_size-2),2))/2) * 2)
+            y = random.randrange(0,((maze_size-2)/2),2) * 2
             #print("y-2=",y)
 
         cell_1=0
         cell_2=0
-        if pixel[x-1][y] == -1:
-            cell_1= pixel[x][y-1]
+        if pixel[y][x-1] == -1:
+            cell_1= pixel[y-1][x]
             #print("Cell1-1=",cell_1)
-            cell_2= pixel[x][y+1]
+            cell_2= pixel[y+1][x]
             #print("Cell2-1=",cell_2)
         else:
-            cell_1= pixel[x-1][y]
+            cell_1= pixel[y][x-1]
             #print("Cell1=",cell_1)
-            cell_2= pixel [x+1][y]
+            cell_2= pixel [y][x+1]
             #print("Cell2=",cell_2)
                         
         if cell_1 != cell_2:
-            pixel[x][y] = 0
+            pixel[y][x] = 0
             for i in range(1,maze_size-1,2):
                 for j in range(1,maze_size-1,2):
                     if pixel[i][j] == cell_2:
                         pixel[i][j] = cell_1
-    pixel[0][1] = 0 
-    pixel[maze_size-1][maze_size-2] = 0
+    pixel[0][1] = 1 
+    pixel[maze_size-1][maze_size-2] = nb
 
 
 def is_finished():
