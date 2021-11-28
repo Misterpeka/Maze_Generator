@@ -1,7 +1,7 @@
 from tkinter import *
 import random
 
-maze_size = 34  # taille du labyrinth
+maze_size = 35  # taille du labyrinth
 cote = 25  # coté d'une cellule
 
 # Créer les matrices
@@ -42,11 +42,11 @@ def create_maze(): #Kruskal's algorithm
         x = random.randint(1,maze_size-2)
         #print("X=",x)
         y = 0
-        if y % 2 == 0: 
-            y = random.randint(0,((maze_size-2)/2)) * 2 
+        if x % 2 == 0: 
+            y = random.randint(1,maze_size-2)
             #print("y-1=",y)
         else:
-            y = random.randrange(0,((maze_size-2)/2),2) * 2
+            y = random.randint(2,maze_size-2)
             #print("y-2=",y)
 
         cell_1=0
@@ -87,9 +87,9 @@ def rgb(rgb):
 def dessiner():
     for y in range(maze_size):
         for x in range(maze_size):
-            if pixel[x][y]==0:
+            if pixel[x][y] >= 0:
                 coul = "white"
-            elif pixel[x][y]==-1:
+            elif pixel[x][y] == -1:
                 coul = "black"
             canvas.itemconfig(case[x][y], fill=coul)
         
