@@ -39,15 +39,16 @@ def init_pixel(): #placer les pixels
 
 def create_maze(): #Kruskal's algorithm
     while is_finished() == True:
-        x = random.randint(1,maze_size-2)
-        #print("X=",x)
+        x = random.randint(1, len(pixel) - 2)
+        print("X=",x)
         y = 0
-        if x % 2 == 0: 
-            y = random.randint(1,maze_size-2)
-            #print("y-1=",y)
+        if (x % 2 == 0):
+            y = random.randint(1, len(pixel) - 2) 
+            print("Y=",y)
         else:
-            y = random.randint(2,maze_size-2)
-            #print("y-2=",y)
+            y = random.randint(1, len(pixel) - 2) 
+            print("Y=",y)
+
 
         cell_1=0
         cell_2=0
@@ -67,7 +68,7 @@ def create_maze(): #Kruskal's algorithm
             for i in range(1,maze_size-1,2):
                 for j in range(1,maze_size-1,2):
                     if pixel[i][j] == cell_2:
-                        pixel[i][j] = cell_1
+                        pixel[i][j] = cell_1        
     pixel[0][1] = 1 
     pixel[maze_size-1][maze_size-2] = nb
 
