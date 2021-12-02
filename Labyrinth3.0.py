@@ -9,7 +9,7 @@ case = [[0 for lig in range(maze_size)] for col in range(maze_size)]
 pixel = [[ 0  for lig in range(maze_size)] for col in range(maze_size)]
 
 # Données initiales
-def init():
+def main():
     for y in range(maze_size):
         for x in range(maze_size):
             case[x][y] = canvas.create_rectangle((x*cote, y*cote, (x+1)*cote, (y+1)*cote), fill="white")
@@ -18,90 +18,115 @@ def init():
     create_maze()
 
 def init_pixel(): #placer les pixels
-    global nb
-    nb = 0 
-    for i in range(maze_size):
-        pixel[0][i] = -1
-        for j in range(1,maze_size):
-            if j % 2 == 0:
-                pixel[j][i] = -1
-            elif i % 2 == 1:
-                pixel[j][i] = 0
-            else:
-                pixel[j][i] = -1
-
     for x in range(maze_size):
-        for y in range(maze_size):
-            if pixel[x][y] == 0:
-                nb += 1
-                pixel[x][y]= nb
-    #print(pixel)
+        pixel[x][0] = "WALL"
+        pixel[x][maze_size-1] = "WALL"
+        pixel[0][x] = "WALL"
+        pixel[maze_size-1][x] = "WALL"
+    for i in range(1,maze_size-1):
+        for j in range(1,maze_size-1):
+            pixel[i][j] = False
 
-def create_maze(): #Kruskal's algorithm
-    while is_finished() == True:
-        x = random.randint(1, len(pixel) - 2)
-        print("X=",x)
-        y = 0
-        if (x % 2 == 0):
-            y = random.randint(1, len(pixel) - 2) 
-            print("Y=",y)
+def create_maze(): #Snake algorithm
+    Direction_possible = []
+    x = 0
+    y = 1
+    x_stock = x 
+    y_stock = y
+    while 
+        if pixel[x+2][y] == False:
+            Direction_possible.append("EAST")
+        elif pixel[x-2][y] == False:
+            Direction_possible.append("WEST")
+        elif pixel[x][y+2] == False:
+            Direction_possible.append("SOUTH")
+        elif pixel[x][y-2] == False:
+            Direction_possible.append("NORTH")
         else:
-            y = random.randint(1, len(pixel) - 2) 
-            print("Y=",y)
+            x = x_stock
+            y = y_stock
+
+        Dir = random.choice(Direction_possible)
+        for i in range(len(Direction_possible)):
+            Direction_possible.pop(i)
+        if Dir == "EAST":
+            pixel[x+2][y] = True
+            pixel[x+1][y] = True
+            x_stock = x 
+            x += 2
+        elif Dir == "WEST":
+            pixel[x-2][y] = True
+            pixel[x-1][y] = True
+            x_stock = x
+            x -= 2
+        elif Dir == "SOUTH":
+            pixel[x][y+2] = True
+            pixel[x][y+1] = True
+            y_stock = y
+            y += 2
+        elif Dir == "NORTH":
+            pixel[x][y-2] = True
+            pixel[x][y-1] = True
+            y_stock = y
+            y -= 2
+        else :
+            x = x_stock
+            y = y_stock
 
 
-        cell_1=0
-        cell_2=0
-        if pixel[y][x-1] == -1:
-            cell_1= pixel[y-1][x]
-            #print("Cell1-1=",cell_1)
-            cell_2= pixel[y+1][x]
-            #print("Cell2-1=",cell_2)
-        else:
-            cell_1= pixel[y][x-1]
-            #print("Cell1=",cell_1)
-            cell_2= pixel [y][x+1]
-            #print("Cell2=",cell_2)
-                        
-        if cell_1 != cell_2:
-            pixel[y][x] = 0
-            for i in range(1,maze_size-1,2):
-                for j in range(1,maze_size-1,2):
-                    if pixel[i][j] == cell_2:
-                        pixel[i][j] = cell_1        
-    pixel[0][1] = 1 
-    pixel[maze_size-1][maze_size-2] = nb
+    
+    
+
+    
 
 
-def is_finished():
-    for ligne in pixel:
-        for colonne in ligne:
-            #print("Colonne",colonne) 
-            if colonne >= 1:
-                return True
-    return False
 
-# Dessiner tous les pixels
-def rgb(rgb):
-    return "#%02x%02x%02x" % rgb
+
+
+    
+
+
+
+
+
+
+
+
+
+    pixel[0][1] = True
+    pixel[maze_size-1][maze_size-2] = True
     
 def dessiner():
     for y in range(maze_size):
         for x in range(maze_size):
-            if pixel[x][y] >= 0:
+            if pixel[x][y] == True:
                 coul = "white"
-            elif pixel[x][y] == -1:
+                canvas.itemconfig(case[x][y], fill=coul)
+            elif pixel[x][y] == False:
                 coul = "black"
-            canvas.itemconfig(case[x][y], fill=coul)
+                canvas.itemconfig(case[x][y], fill=coul)
+            elif pixel[x][y] == "WALL":
+                coul = "black"
+                canvas.itemconfig(case[x][y], fill=coul)
 
 
 def score_boxes(pixel):
+    print("scoreboxes")
+    pixel[0][1] = 0
+
+    for x in range(1,maze_size-1):
+        for y in range(1,maze_size-1):
+            if pixel[x][y] >= 0:
+                pixel[x][y] = 0
+
+
     color = 1
-    temp = pixel
     distance = 1
     pixel[maze_size - 1][maze_size - 2] = 1
     canvas.itemconfig(case[maze_size - 1][maze_size - 2], fill=rgb((255,255,0)))
+
     while pixel[1][1] == 0:
+        temp = pixel
         distance += 1
         for i in range (0,maze_size - 2,-1):
             for j in range (0,maze_size - 2,-1):
@@ -110,14 +135,24 @@ def score_boxes(pixel):
                         temp[i][j] = distance
                         color += 1
                         canvas.itemconfig(case[i][j], fill=rgb((color * 1.5,color * 1.5,color * 1.5)))
-    pixel = temp
-                        
+        pixel = temp
+
+    maze_size[1][0] = distance + 20
+
+    for i in range(0,maze_size):
+        for j in range(0,maze_size):
+            if pixel[i][j] == 0: 
+                pixel[i][j] = distance + 1 
+            if maze_size[i][j] == -1:
+                maze_size[i][j] = distance + 10   
 
 
 def maze_solver():
+    print("maze_solver")
     x = 1 
     y = 1
-    while x != maze_size - 2 or y != maze_size - 2: 
+    while x != maze_size - 2 or y != maze_size - 2:
+        print("test")
         up = pixel[y-1][x]
         down = pixel[y+1][x]
         left = pixel[y][x-1]
@@ -134,7 +169,7 @@ def maze_solver():
         elif right <= up and right <= down and right <= left:
             canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
             x = x + 1
-        canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
+    canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
 
 
 # Lancement du programme
@@ -144,13 +179,6 @@ canvas = Canvas(fenetre, width=cote*maze_size, height=cote*maze_size, highlightt
 fenetre.minsize(cote*maze_size,cote*maze_size)
 fenetre.maxsize(cote*maze_size,cote*maze_size)
 canvas.pack()
-init()
+main()
 dessiner()
-score_boxes(pixel)
-maze_solver()
-print(""" 
-    ======================
-        maze generator
-    ======================
-    """)
 fenetre.mainloop()
