@@ -27,74 +27,71 @@ def init_pixel(): #placer les pixels
         for j in range(1,maze_size-1):
             pixel[i][j] = False
 
-def create_maze(): #Snake algorithm
-    Direction_possible = []
+def create_maze(): #Exploration exhaustive
     x = 0
     y = 1
-    x_stock = x 
-    y_stock = y
-    while 
-        if pixel[x+2][y] == False:
-            Direction_possible.append("EAST")
-        elif pixel[x-2][y] == False:
-            Direction_possible.append("WEST")
-        elif pixel[x][y+2] == False:
-            Direction_possible.append("SOUTH")
-        elif pixel[x][y-2] == False:
-            Direction_possible.append("NORTH")
-        else:
-            x = x_stock
-            y = y_stock
+    x_position=[]
+    y_position=[]
 
-        Dir = random.choice(Direction_possible)
-        for i in range(len(Direction_possible)):
-            Direction_possible.pop(i)
+    while x != maze_size-1 and y != maze_size-2:
+        Dir = random.choice(check(x,y))
         if Dir == "EAST":
+            print("EST")
             pixel[x+2][y] = True
             pixel[x+1][y] = True
-            x_stock = x 
+            x_position.append(x)
+            y_position.append(y)
             x += 2
         elif Dir == "WEST":
+            print("West")
             pixel[x-2][y] = True
             pixel[x-1][y] = True
-            x_stock = x
+            x_position.append(x)
+            y_position.append(y)
             x -= 2
         elif Dir == "SOUTH":
+            print("South")
             pixel[x][y+2] = True
             pixel[x][y+1] = True
-            y_stock = y
+            x_position.append(x)
+            y_position.append(y)
             y += 2
         elif Dir == "NORTH":
+            print("North")
             pixel[x][y-2] = True
             pixel[x][y-1] = True
-            y_stock = y
+            x_position.append(x)
+            y_position.append(y)
             y -= 2
         else :
-            x = x_stock
-            y = y_stock
+            print(x_position)
+            print(y_position)
+            x_position.reverse()
+            y_position.reverse()
 
+            x = x_position[0]
+            y = y_position[0]
 
-    
-    
-
-    
-
-
-
-
-
-    
-
-
-
-
-
-
-
+            x_position.pop(0)
+            y_position.pop(0)
+            x_position.reverse()
+            y_position.reverse()
 
 
     pixel[0][1] = True
-    pixel[maze_size-1][maze_size-2] = True
+    pixel[maze_size-1][maze_size-2] = False
+    
+def check(x,y):
+    Direction_possible = []
+    if pixel[x+2][y] == False:
+        Direction_possible.append("EAST")
+    elif pixel[x-2][y] == False:
+        Direction_possible.append("WEST")
+    elif pixel[x][y+2] == False:
+        Direction_possible.append("SOUTH")
+    elif pixel[x][y-2] == False:
+        Direction_possible.append("NORTH")
+    return Direction_possible
     
 def dessiner():
     for y in range(maze_size):
