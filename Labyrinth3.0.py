@@ -34,7 +34,11 @@ def create_maze(): #Exploration exhaustive
     y_position=[]
 
     while x != maze_size-1 and y != maze_size-2:
-        Dir = random.choice(check(x,y))
+        print(check(x,y))
+        if len(check(x,y)) >= 1:
+            Dir = random.choice(check(x,y))
+        else:
+            Dir = []
         if Dir == "EAST":
             print("EST")
             pixel[x+2][y] = True
@@ -63,9 +67,8 @@ def create_maze(): #Exploration exhaustive
             x_position.append(x)
             y_position.append(y)
             y -= 2
-        else :
-            print(x_position)
-            print(y_position)
+        if Dir == [] :
+            print("RIEN")
             x_position.reverse()
             y_position.reverse()
 
@@ -77,22 +80,26 @@ def create_maze(): #Exploration exhaustive
             x_position.reverse()
             y_position.reverse()
 
-
     pixel[0][1] = True
     pixel[maze_size-1][maze_size-2] = False
-    
+
 def check(x,y):
     Direction_possible = []
-    if pixel[x+2][y] == False:
-        Direction_possible.append("EAST")
-    elif pixel[x-2][y] == False:
-        Direction_possible.append("WEST")
-    elif pixel[x][y+2] == False:
-        Direction_possible.append("SOUTH")
-    elif pixel[x][y-2] == False:
-        Direction_possible.append("NORTH")
+    if x+2 <= maze_size:
+        if pixel[x+2][y] == False:
+            Direction_possible.append("EAST")
+    if x-2 >= 0:
+        if pixel[x-2][y] == False:
+            Direction_possible.append("WEST")
+    if y+2 <= maze_size:
+        if pixel[x][y+2] == False:
+            Direction_possible.append("SOUTH")
+    if y-2 >= 0:
+        if pixel[x][y-2] == False:
+            Direction_possible.append("NORTH")
     return Direction_possible
-    
+
+
 def dessiner():
     for y in range(maze_size):
         for x in range(maze_size):
