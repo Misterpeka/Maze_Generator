@@ -17,7 +17,7 @@ def main():
     init_pixel()
     create_maze()
     complexe()
-    draw()
+    print("FINI")
 
 def init_pixel(): #placer les pixels
     for x in range(maze_size):
@@ -30,6 +30,8 @@ def init_pixel(): #placer les pixels
             pixel[i][j] = False
 
 def create_maze(): #Exploration exhaustive
+    pixel[maze_size-1][maze_size-2] = True
+    pixel[maze_size-2][maze_size-2] = True
     x = 0
     y = 1
     x_position=[]
@@ -78,9 +80,8 @@ def create_maze(): #Exploration exhaustive
             else:
                 x = maze_size-1
                 y = maze_size-2
-    pixel[0][1] = True
-    pixel[maze_size-1][maze_size-2] = True
-    pixel[maze_size-2][maze_size-2] = True
+        draw()
+    pixel[0][1] = True #départ
 
 def check(x,y): #regarder les cases autour
     Direction_possible = []
@@ -103,11 +104,15 @@ def complexe(): #rends le labyrinthe complexe
         x = random.randint(1,maze_size-1)
         y = random.randint(1,maze_size-1)
         if pixel[x][y] == False: 
-            if pixel[x][y+1] == False and pixel[x][y-1] == False and pixel[x-1][y] == True and pixel[x+1][y] == True or pixel[x-1][y] and pixel[x-1][y] and pixel[x][y-1] == True and pixel[x][y+1]:
+            if pixel[x][y+1] == False and pixel[x][y-1] == False and pixel[x-1][y] == True and pixel[x+1][y] == True:
                 pixel[x][y] = True
-
+                draw()
+            if pixel[x-1][y] == False and pixel[x-1][y] == False and pixel[x][y-1] == True and pixel[x][y+1] == True:
+                pixel[x][y] = True
+                draw()
 
 def draw(): #affiche le labyrinthe
+    fenetre.update()
     for y in range(maze_size):
         for x in range(maze_size):
             if pixel[x][y] == True:
@@ -120,6 +125,10 @@ def draw(): #affiche le labyrinthe
                 coul = "black"
                 canvas.itemconfig(case[x][y], fill=coul)
 
+    canvas.itemconfig(case[0][1], fill=rgb((0,255,0))) #départ
+    canvas.itemconfig(case[maze_size-1][maze_size-2], fill=rgb((255,0,0))) #arrivé
+def rgb(rgb):
+    return "#%02x%02x%02x" % rgb
 # Lancement du programme
 fenetre = Tk()
 fenetre.title("Labyrinth")
