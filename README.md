@@ -7,4 +7,4 @@ This program is able to generate and solve mazes.
 
 <br/>
 # Credits
-[**Yannise Arbane**](https://github.com/Misterpeka) : Creator of the project.
+* [**Yannise Arbane**](https://github.com/Misterpeka) : Creator of the project.
