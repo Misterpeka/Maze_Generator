@@ -18,6 +18,8 @@ def main():
     create_maze()
     complexe()
     print("FINI")
+    replay()
+
 
 def init_pixel(): #placer les pixels
     for x in range(maze_size):
@@ -127,6 +129,13 @@ def draw(): #affiche le labyrinthe
 
     canvas.itemconfig(case[0][1], fill=rgb((0,255,0))) #départ
     canvas.itemconfig(case[maze_size-1][maze_size-2], fill=rgb((255,0,0))) #arrivé
+
+def replay():
+    init_pixel()
+    create_maze()
+    complexe()
+    print("FINI")
+
 def rgb(rgb):
     return "#%02x%02x%02x" % rgb
 # Lancement du programme
