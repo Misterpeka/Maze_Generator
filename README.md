@@ -5,5 +5,17 @@
 
 This program is able to generate.
 
+<br/>
+
+<p align="center">
+	<img src="https://imgur.com/gallery/duj0TBI" width="500">
+</p>
+
+# Notes
+
+* it will only generate maze in loop.
+
+<br/>
+
 # Credits
 * [Yannise Arbane](https://github.com/Misterpeka) : Creator of the project.
