@@ -33,65 +33,63 @@ def create_maze(): #Exploration exhaustive
     x_position=[]
     y_position=[]
 
-    while x != maze_size-1 and y != maze_size-2:
-        print(check(x,y))
+    while x != maze_size-1 or y != maze_size-2:
         if len(check(x,y)) >= 1:
             Dir = random.choice(check(x,y))
         else:
             Dir = []
         if Dir == "EAST":
-            print("EST")
             pixel[x+2][y] = True
             pixel[x+1][y] = True
             x_position.append(x)
             y_position.append(y)
             x += 2
         elif Dir == "WEST":
-            print("West")
             pixel[x-2][y] = True
             pixel[x-1][y] = True
             x_position.append(x)
             y_position.append(y)
             x -= 2
         elif Dir == "SOUTH":
-            print("South")
             pixel[x][y+2] = True
             pixel[x][y+1] = True
             x_position.append(x)
             y_position.append(y)
             y += 2
         elif Dir == "NORTH":
-            print("North")
             pixel[x][y-2] = True
             pixel[x][y-1] = True
             x_position.append(x)
             y_position.append(y)
             y -= 2
         if Dir == [] :
-            print("RIEN")
             x_position.reverse()
             y_position.reverse()
+            if len(x_position) != 0 :
+                print(x_position)
+                x = x_position[0]
+                y = y_position[0]
 
-            x = x_position[0]
-            y = y_position[0]
-
-            x_position.pop(0)
-            y_position.pop(0)
-            x_position.reverse()
-            y_position.reverse()
-
+                x_position.pop(0)
+                y_position.pop(0)
+                x_position.reverse()
+                y_position.reverse()
+            else:
+                x = maze_size-1
+                y = maze_size-2
     pixel[0][1] = True
-    pixel[maze_size-1][maze_size-2] = False
+    pixel[maze_size-1][maze_size-2] = True
+    pixel[maze_size-2][maze_size-2] = True
 
 def check(x,y):
     Direction_possible = []
-    if x+2 <= maze_size:
+    if x+2 <= maze_size-1:
         if pixel[x+2][y] == False:
             Direction_possible.append("EAST")
     if x-2 >= 0:
         if pixel[x-2][y] == False:
             Direction_possible.append("WEST")
-    if y+2 <= maze_size:
+    if y+2 <= maze_size-1:
         if pixel[x][y+2] == False:
             Direction_possible.append("SOUTH")
     if y-2 >= 0:
@@ -113,6 +111,8 @@ def dessiner():
                 coul = "black"
                 canvas.itemconfig(case[x][y], fill=coul)
 
+def rgb(rgb):
+    return "#%02x%02x%02x" % rgb
 
 def score_boxes(pixel):
     print("scoreboxes")
