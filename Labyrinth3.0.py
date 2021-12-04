@@ -16,6 +16,7 @@ def main():
     #placer les pixels et créer le labyrinthe
     init_pixel()
     create_maze()
+    complexe()
 
 def init_pixel(): #placer les pixels
     for x in range(maze_size):
@@ -96,6 +97,14 @@ def check(x,y):
         if pixel[x][y-2] == False:
             Direction_possible.append("NORTH")
     return Direction_possible
+
+def complexe():
+    for i in range(maze_size):
+        x = random.randint(1,maze_size-1)
+        y = random.randint(1,maze_size-1)
+        if pixel[x][y] == False: 
+            if pixel[x][y+1] and pixel[x][y-1] or pixel[x-1][y] and pixel[x-1][y]:
+                pixel[x][y] = True
 
 
 def dessiner():
