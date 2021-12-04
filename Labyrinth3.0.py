@@ -17,6 +17,8 @@ def main():
     init_pixel()
     create_maze()
     complexe()
+    score_boxes(pixel)
+    maze_solver()
 
 def init_pixel(): #placer les pixels
     for x in range(maze_size):
@@ -67,7 +69,6 @@ def create_maze(): #Exploration exhaustive
             x_position.reverse()
             y_position.reverse()
             if len(x_position) != 0 :
-                print(x_position)
                 x = x_position[0]
                 y = y_position[0]
 
@@ -103,7 +104,9 @@ def complexe():
         x = random.randint(1,maze_size-1)
         y = random.randint(1,maze_size-1)
         if pixel[x][y] == False: 
-            if pixel[x][y+1] and pixel[x][y-1] or pixel[x-1][y] and pixel[x-1][y]:
+            if pixel[x][y+1] == False and pixel[x][y-1] == False and pixel[x-1][y] == True and pixel[x+1][y] == True or pixel[x-1][y] and pixel[x-1][y] and pixel[x][y-1] == True and pixel[x][y+1]:
+                print("arrivé")
+                print(x,y)
                 pixel[x][y] = True
 
 
@@ -138,7 +141,7 @@ def score_boxes(pixel):
     pixel[maze_size - 1][maze_size - 2] = 1
     canvas.itemconfig(case[maze_size - 1][maze_size - 2], fill=rgb((255,255,0)))
 
-    while pixel[1][1] == 0:
+    while pixel[1][1] != 0:
         temp = pixel
         distance += 1
         for i in range (0,maze_size - 2,-1):
@@ -150,14 +153,14 @@ def score_boxes(pixel):
                         canvas.itemconfig(case[i][j], fill=rgb((color * 1.5,color * 1.5,color * 1.5)))
         pixel = temp
 
-    maze_size[1][0] = distance + 20
+    pixel[0][1] = distance + 20
 
     for i in range(0,maze_size):
         for j in range(0,maze_size):
-            if pixel[i][j] == 0: 
-                pixel[i][j] = distance + 1 
-            if maze_size[i][j] == -1:
-                maze_size[i][j] = distance + 10   
+            if pixel[j][i] == 0: 
+                pixel[j][i] = distance + 1 
+            if pixel[j][i] == -1:
+                pixel[j][i] = distance + 10   
 
 
 def maze_solver():
@@ -182,7 +185,7 @@ def maze_solver():
         elif right <= up and right <= down and right <= left:
             canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
             x = x + 1
-    canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
+        canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
 
 
 # Lancement du programme
