@@ -138,6 +138,7 @@ def replay():
 
 def rgb(rgb):
     return "#%02x%02x%02x" % rgb
+    
 # Lancement du programme
 fenetre = Tk()
 fenetre.title("Labyrinth")
