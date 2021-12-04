@@ -8,7 +8,7 @@ This program is able to generate.
 <br/>
 
 <p align="center">
-	<img src="https://imgur.com/gallery/duj0TBI" width="500">
+	<img src="https://i.imgur.com/a0wCUqM.gif" width="500">
 </p>
 
 # Notes
