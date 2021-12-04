@@ -5,6 +5,5 @@
 
 This program is able to generate.
 
-<br/>
 # Credits
-* [**Yannise Arbane**](https://github.com/Misterpeka) : Creator of the project.
+* [Yannise Arbane](https://github.com/Misterpeka) : Creator of the project.
