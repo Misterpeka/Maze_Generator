@@ -17,8 +17,6 @@ def main():
     init_pixel()
     create_maze()
     complexe()
-    score_boxes(pixel)
-    maze_solver()
 
 def init_pixel(): #placer les pixels
     for x in range(maze_size):
@@ -83,7 +81,7 @@ def create_maze(): #Exploration exhaustive
     pixel[maze_size-1][maze_size-2] = True
     pixel[maze_size-2][maze_size-2] = True
 
-def check(x,y):
+def check(x,y): #regarder les cases autour
     Direction_possible = []
     if x+2 <= maze_size-1:
         if pixel[x+2][y] == False:
@@ -99,7 +97,7 @@ def check(x,y):
             Direction_possible.append("NORTH")
     return Direction_possible
 
-def complexe():
+def complexe(): #rends le labyrinthe complexe
     for i in range(maze_size):
         x = random.randint(1,maze_size-1)
         y = random.randint(1,maze_size-1)
@@ -110,7 +108,7 @@ def complexe():
                 pixel[x][y] = True
 
 
-def dessiner():
+def draw(): #affiche le labyrinthe
     for y in range(maze_size):
         for x in range(maze_size):
             if pixel[x][y] == True:
@@ -123,71 +121,6 @@ def dessiner():
                 coul = "black"
                 canvas.itemconfig(case[x][y], fill=coul)
 
-def rgb(rgb):
-    return "#%02x%02x%02x" % rgb
-
-def score_boxes(pixel):
-    print("scoreboxes")
-    pixel[0][1] = 0
-
-    for x in range(1,maze_size-1):
-        for y in range(1,maze_size-1):
-            if pixel[x][y] >= 0:
-                pixel[x][y] = 0
-
-
-    color = 1
-    distance = 1
-    pixel[maze_size - 1][maze_size - 2] = 1
-    canvas.itemconfig(case[maze_size - 1][maze_size - 2], fill=rgb((255,255,0)))
-
-    while pixel[1][1] != 0:
-        temp = pixel
-        distance += 1
-        for i in range (0,maze_size - 2,-1):
-            for j in range (0,maze_size - 2,-1):
-                if pixel[i][j] == 0 : 
-                    if pixel[i][j - 1]  > 0 or pixel[i][j + 1] > 0 or pixel[i - 1][j] >  0 or pixel[i + 1][j] > 0:
-                        temp[i][j] = distance
-                        color += 1
-                        canvas.itemconfig(case[i][j], fill=rgb((color * 1.5,color * 1.5,color * 1.5)))
-        pixel = temp
-
-    pixel[0][1] = distance + 20
-
-    for i in range(0,maze_size):
-        for j in range(0,maze_size):
-            if pixel[j][i] == 0: 
-                pixel[j][i] = distance + 1 
-            if pixel[j][i] == -1:
-                pixel[j][i] = distance + 10   
-
-
-def maze_solver():
-    print("maze_solver")
-    x = 1 
-    y = 1
-    while x != maze_size - 2 or y != maze_size - 2:
-        print("test")
-        up = pixel[y-1][x]
-        down = pixel[y+1][x]
-        left = pixel[y][x-1]
-        right = pixel[y][x+1]
-        if up <= down and up <= left and up <= right:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            y = y - 1
-        elif down <= up and down <= left and down <= right:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            y = y + 1
-        elif left <= up and left <= down and left <= right:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            x = x - 1
-        elif right <= up and right <= down and right <= left:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            x = x + 1
-        canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-
-
 # Lancement du programme
 fenetre = Tk()
 fenetre.title("Labyrinth")
@@ -196,5 +129,5 @@ fenetre.minsize(cote*maze_size,cote*maze_size)
 fenetre.maxsize(cote*maze_size,cote*maze_size)
 canvas.pack()
 main()
-dessiner()
+draw()
 fenetre.mainloop()
