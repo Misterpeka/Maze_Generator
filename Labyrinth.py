@@ -1,5 +1,6 @@
 from tkinter import *
 import random
+import sys
 
 maze_size = 35  # taille du labyrinth
 cote = 25  # coté d'une cellule
@@ -18,7 +19,6 @@ def main():
     create_maze()
     complexe()
     print("FINI")
-    replay()
 
 
 def init_pixel(): #placer les pixels
@@ -32,8 +32,6 @@ def init_pixel(): #placer les pixels
             pixel[i][j] = False
 
 def create_maze(): #Exploration exhaustive
-    pixel[maze_size-1][maze_size-2] = True
-    pixel[maze_size-2][maze_size-2] = True
     x = 0
     y = 1
     x_position=[]
@@ -82,8 +80,11 @@ def create_maze(): #Exploration exhaustive
             else:
                 x = maze_size-1
                 y = maze_size-2
+                pixel[maze_size-2][maze_size-2] = True
+
         draw()
     pixel[0][1] = True #départ
+    pixel[maze_size-1][maze_size-2] = True
 
 def check(x,y): #regarder les cases autour
     Direction_possible = []
@@ -142,9 +143,22 @@ def rgb(rgb):
 # Lancement du programme
 fenetre = Tk()
 fenetre.title("Labyrinth")
+fenetre.iconbitmap('Favicon.ico')
 canvas = Canvas(fenetre, width=cote*maze_size, height=cote*maze_size, highlightthickness=0)
 fenetre.minsize(cote*maze_size,cote*maze_size)
 fenetre.maxsize(cote*maze_size,cote*maze_size)
+
+def quit():
+    fenetre.destroy()
+
+menubar= Menu(fenetre)
+menu = Menu(menubar, tearoff=0)
+menu.add_command(label="Relancer", command=replay)
+menu.add_separator()
+menu.add_command(label="Quitter", command=quit)
+menubar.add_cascade(label="Action", menu=menu)
+fenetre.config(menu=menubar)
+
 canvas.pack()
 
 if __name__ == '__main__':
