@@ -17,6 +17,7 @@ def main():
     init_pixel()
     create_maze()
     complexe()
+    draw()
 
 def init_pixel(): #placer les pixels
     for x in range(maze_size):
@@ -103,8 +104,6 @@ def complexe(): #rends le labyrinthe complexe
         y = random.randint(1,maze_size-1)
         if pixel[x][y] == False: 
             if pixel[x][y+1] == False and pixel[x][y-1] == False and pixel[x-1][y] == True and pixel[x+1][y] == True or pixel[x-1][y] and pixel[x-1][y] and pixel[x][y-1] == True and pixel[x][y+1]:
-                print("arrivé")
-                print(x,y)
                 pixel[x][y] = True
 
 
@@ -128,6 +127,7 @@ canvas = Canvas(fenetre, width=cote*maze_size, height=cote*maze_size, highlightt
 fenetre.minsize(cote*maze_size,cote*maze_size)
 fenetre.maxsize(cote*maze_size,cote*maze_size)
 canvas.pack()
-main()
-draw()
-fenetre.mainloop()
+
+if __name__ == '__main__':
+    main()
+    fenetre.mainloop()
