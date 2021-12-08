@@ -18,4 +18,4 @@ This program is able to generate maze.
 <br/>
 
 # Credits
-* [Yannise Arbane](https://github.com/Misterpeka) : Creator of the project.
+* [Yannise Arbane](https://github.com/Yannise-A) : Creator of the project.
