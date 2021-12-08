@@ -3,7 +3,7 @@
 ![Open Source](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)
 <br/>
 
-This program is able to generate.
+This program is able to generate maze.
 
 <br/>
 
