@@ -1,6 +1,5 @@
 from tkinter import *
 import random
-import sys
 
 maze_size = 35  # taille du labyrinth
 cote = 25  # coté d'une cellule
