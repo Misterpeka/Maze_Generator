@@ -34,19 +34,26 @@ def init_pixel(): #placer les pixels
 def create_maze(size): #Recurisve division
     x = round(size // 2)
     y = round(size // 2)
-    for i in range(size):
-        pixel[x][i] = False
-        pixel[i][y] = False
+    if x >=2 and y >=2 :
+        for i in range(size):
+            pixel[x][i] = False
+            pixel[i][y] = False
+            draw()
+        #create_way(x,y,size)
         draw()
-    create_way(x,y,size)
-    draw()
-    create_maze(size//2)
+        create_maze(size//2)
+    else:
+        x
         
 def create_way(x,y,size):
     k = random.randint(1,size-1)
     j = random.randint(1,size-1)
-    pixel[x][k] = True
-    pixel[j][y] = True
+    if k+1 <= size or k-1 > 0 or x+1 <= size or x-1 > 0:
+        if pixel[x][k+1] != False and pixel[x][k-1] != False and pixel[x+1][k] != False and pixel[x-1][k] != False:
+            pixel[x][k] = True
+            pixel[j][y] = True
+        else:
+            create_way(x,y,size)
 
 def complexe(): #rends le labyrinthe complexe
     for i in range(maze_size):
