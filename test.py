@@ -18,9 +18,11 @@ def main():
     init_pixel()
     create_maze()
     complexe()
-    path = find_shortest_path((0, 1), (maze_size - 1, maze_size - 2))
+    distance, _ = find_shortest_path((0, 1), (maze_size - 1, maze_size - 2))
+    path = retrace_path((0, 1), (maze_size - 1, maze_size - 2), distance)
     draw_path(path)
     print("FINI")
+
 
 def init_pixel(): # placer les pixels
     for x in range(maze_size):
@@ -131,7 +133,7 @@ def check_chemin(x,y): # regarder les cases autour pour chemin
             Direction_possible.append("N")
     return Direction_possible
 
-def find_shortest_path(start, end): # TROUVER LE CHEMIN LE PLUS COURT
+def find_shortest_path(start, end):  # TROUVER LE CHEMIN LE PLUS COURT
     distance = [[float('inf')] * maze_size for _ in range(maze_size)]
     distance[end[0]][end[1]] = 0
 
@@ -139,6 +141,7 @@ def find_shortest_path(start, end): # TROUVER LE CHEMIN LE PLUS COURT
     visited = set()
 
     max_distance = 0
+    max_possible_distance = (maze_size - 1) * 2  # la distance maximale possible dans le labyrinthe
 
     while queue:
         x, y = queue.pop(0)
@@ -157,24 +160,51 @@ def find_shortest_path(start, end): # TROUVER LE CHEMIN LE PLUS COURT
                         max_distance = max(max_distance, distance[nx][ny])
                         queue.append((nx, ny))
 
+                        # Affiche la couleur pendant la recherche du chemin
+                        color = lerp_color((255, 255, 0), (0, 0, 139), distance[nx][ny] / max_possible_distance)
+                        screen.fill(color, (nx * cote, ny * cote, cote, cote))
+                        pygame.display.update()
+                        pygame.time.delay(5)  # ajustez cette valeur pour changer la vitesse de l'animation
+
     return distance, max_distance
 
-def draw_path(path):  # affiche le chemin le plus court
-    distance, max_distance = path
-    for y in range(maze_size):
-        for x in range(maze_size):
-            if distance[x][y] != float('inf'):
-                color = lerp_color((0, 255, 0), (0, 0, 255), distance[x][y] / max_distance)
-                screen.fill(color, (x * cote, y * cote, cote, cote))
-                pygame.display.update()
-                pygame.time.delay(5)  # ajustez cette valeur pour changer la vitesse de l'animation
 
+
+
+def draw_path(path):  # affiche le chemin le plus court
+    for x, y in path:
+        screen.fill((0, 255, 0), (x * cote, y * cote, cote, cote))
+    pygame.display.update()
+
+def draw_progress(x, y):
+    screen.fill((0, 0, 255), (x * cote, y * cote, cote, cote))
+    pygame.display.update()
+    pygame.time.delay(5)  # ajustez cette valeur pour changer la vitesse de l'animation
+
+
+def retrace_path(start, end, distance):
+    x, y = start
+    path = []
+
+    while (x, y) != end:
+        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < maze_size and 0 <= ny < maze_size and distance[nx][ny] == distance[x][y] - 1:
+                path.append((nx, ny))
+                x, y = nx, ny
+                break
+
+    return path
+
+def clamp_color_value(value):
+    return max(0, min(255, int(value)))
 
 def lerp_color(color1, color2, t):
-    r = int(color1[0] * (1 - t) + color2[0] * t)
-    g = int(color1[1] * (1 - t) + color2[1] * t)
-    b = int(color1[2] * (1 - t) + color2[2] * t)
+    r = clamp_color_value(color1[0] * (1 - t) + color2[0] * t)
+    g = clamp_color_value(color1[1] * (1 - t) + color2[1] * t)
+    b = clamp_color_value(color1[2] * (1 - t) + color2[2] * t)
     return (r, g, b)
+
 
 def draw(): #affiche le labyrinthe
     for y in range(maze_size):
