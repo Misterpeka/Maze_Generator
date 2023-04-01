@@ -1,93 +1,72 @@
 from tkinter import *
 import random
-import sys
 
 maze_size = 35  # taille du labyrinth
 cote = 25  # coté d'une cellule
 
 # Créer les matrices
 case = [[0 for lig in range(maze_size)] for col in range(maze_size)]
-pixel = [[ 0  for lig in range(maze_size)] for col in range(maze_size)]
+pixel = [["WALL" for lig in range(maze_size)] for col in range(maze_size)]
 
 # Données initiales
 def main():
     for y in range(maze_size):
         for x in range(maze_size):
             case[x][y] = canvas.create_rectangle((x*cote, y*cote, (x+1)*cote, (y+1)*cote), fill="white")
-    #placer les pixels et créer le labyrinthe
-    init_pixel()
-    create_maze(maze_size)
+    
+    create_maze(0, 0, maze_size - 1, maze_size - 1)
+
     draw()
     print("FINI")
 
+def create_maze(x1, y1, x2, y2):
+    if x2 - x1 < 2 or y2 - y1 < 2:
+        return
 
-def init_pixel(): #placer les pixels
-    for x in range(maze_size):
-        for y in range(maze_size):
-            pixel[x][y] = True
-    for x in range(maze_size):
-        pixel[x][0] = "WALL"
-        pixel[0][x] = "WALL"
-        pixel[x][maze_size-1] = "WALL"
-        pixel[maze_size-1][x] = "WALL"
+    hx = random.randrange(x1 + 1, x2, 2) if x2 - x1 > 2 else x1 + 1
+    vy = random.randrange(y1 + 1, y2, 2) if y2 - y1 > 2 else y1 + 1
 
-def create_maze(size): #Recurisve division
-    x = round(size // 2)
-    y = round(size // 2)
-    if x >=2 and y >=2 :
-        for i in range(size):
-            pixel[x][i] = False
-            pixel[i][y] = False
-            draw()
-        #create_way(x,y,size)
-        draw()
-        create_maze(size//2)
-    else:
-        x
-        
-def create_way(x,y,size):
-    k = random.randint(1,size-1)
-    j = random.randint(1,size-1)
-    if k+1 <= size or k-1 > 0 or x+1 <= size or x-1 > 0:
-        if pixel[x][k+1] != False and pixel[x][k-1] != False and pixel[x+1][k] != False and pixel[x-1][k] != False:
-            pixel[x][k] = True
-            pixel[j][y] = True
-        else:
-            create_way(x,y,size)
+    for x in range(x1 + 1, x2, 2):
+        pixel[x][vy] = "WALL"
+    for y in range(y1 + 1, y2, 2):
+        pixel[hx][y] = "WALL"
 
-def complexe(): #rends le labyrinthe complexe
-    for i in range(maze_size):
-        x = random.randint(1,maze_size-1)
-        y = random.randint(1,maze_size-1)
-        if pixel[x][y] == False: 
-            if pixel[x][y+1] == False and pixel[x][y-1] == False and pixel[x-1][y] == True and pixel[x+1][y] == True:
-                pixel[x][y] = True
-                draw()
-            if pixel[x-1][y] == False and pixel[x-1][y] == False and pixel[x][y-1] == True and pixel[x][y+1] == True:
-                pixel[x][y] = True
-                draw()
+    door_positions = [
+        (hx, random.randrange(y1 + 1, vy, 2) if vy - y1 > 2 else y1 + 1),
+        (hx, random.randrange(vy + 1, y2, 2) if y2 - vy > 2 else vy + 1),
+        (random.randrange(x1 + 1, hx, 2) if hx - x1 > 2 else x1 + 1, vy),
+        (random.randrange(hx + 1, x2, 2) if x2 - hx > 2 else hx + 1, vy),
+    ]
+    random.shuffle(door_positions)
+    for _ in range(3):
+        door_x, door_y = door_positions.pop()
+        pixel[door_x][door_y] = "PATH"
+
+    create_maze(x1, y1, hx - 1, vy - 1)
+    create_maze(hx + 1, y1, x2, vy - 1)
+    create_maze(x1, vy + 1, hx - 1, y2)
+    create_maze(hx + 1, vy + 1, x2, y2)
+
 
 def draw(): #affiche le labyrinthe
     fenetre.update()
     for y in range(maze_size):
         for x in range(maze_size):
-            if pixel[x][y] == True:
+            if pixel[x][y] == "PATH":
                 coul = "white"
-                canvas.itemconfig(case[x][y], fill=coul)
-            elif pixel[x][y] == False:
-                coul = "black"
                 canvas.itemconfig(case[x][y], fill=coul)
             elif pixel[x][y] == "WALL":
                 coul = "black"
                 canvas.itemconfig(case[x][y], fill=coul)
 
-    canvas.itemconfig(case[0][1], fill=rgb((0,255,0))) #départ
-    canvas.itemconfig(case[maze_size-1][maze_size-2], fill=rgb((255,0,0))) #arrivé
+    canvas.itemconfig(case[1][0], fill=rgb((0,255,0))) #départ
+    canvas.itemconfig(case[maze_size-2][maze_size-1], fill=rgb((255,0,0))) #arrivé
 
 def replay():
-    init_pixel()
-    create_maze(maze_size)
-    complexe()
+    global pixel
+    pixel = [["WALL" for lig in range(maze_size)] for col in range(maze_size)]
+    create_maze(0, 0, maze_size - 1, maze_size - 1)
+    draw()
     print("FINI")
 
 def rgb(rgb):
