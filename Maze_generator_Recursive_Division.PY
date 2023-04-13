@@ -6,7 +6,7 @@ maze_size = 35
 cell_size = 25
 
 walls_to_add = []  # Ajout de cette ligne
-wall_creation_delay = 30  # Ajout de cette ligne
+wall_creation_delay = 5  # Ajout de cette ligne
 
 
 
